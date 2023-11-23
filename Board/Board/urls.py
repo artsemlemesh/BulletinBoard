@@ -20,9 +20,10 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('bboard/', include('bboard.urls')),
+    path('', include('protect.urls')),
+    path('sign/', include('sign.urls')),
 
 
 
-
-    path('', include('django.contrib.flatpages.urls')),
+    path('a', include('django.contrib.flatpages.urls')),
 ]

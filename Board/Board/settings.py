@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'bboard',
+    'sign',
+    'protect',
     'django_filters',
 
     'ckeditor_uploader', #custom TextField
@@ -46,6 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages', #=static pages are not associated with any database or url.Typically for 'about us', 'contact us'
     'fpages', #extension of previous, provides additional features
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 SITE_ID = 1
@@ -147,7 +153,14 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+
+
+
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+LOGIN_URL = 'sign/login/'
+LOGIN_REDIRECT_URL = '/'
