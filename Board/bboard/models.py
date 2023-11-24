@@ -1,8 +1,11 @@
+from datetime import timedelta
+from django.utils import timezone
+
+
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.urls import reverse
-
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -41,6 +44,14 @@ class Category(models.Model):
         return self.name
 
 
+class DisposableCode(models.Model):
+    code = models.CharField(max_length=255, unique=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(default=timezone.localtime(timezone.now()) + timedelta(minutes=1))
+
+    def __str__(self):
+        return f'Disposable code: {self.code}'
 
 
 

@@ -164,3 +164,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'sign/login/'
 LOGIN_REDIRECT_URL = '/'
+
+EMAIL_HOST = 'smtp.yandex.by'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'Artsemlemesh'
+EMAIL_HOST_PASSWORD = 'enjnbjhqjinpomwh'
+EMAIL_USE_SSL = True
+SITE_URL = "http://127.0.0.1:8000"
+DEFAULT_FROM_EMAIL = 'Artsemlemesh@yandex.by'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
