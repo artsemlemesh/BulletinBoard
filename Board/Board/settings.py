@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'bboard',
-    'sign',
     'protect',
     'django_filters',
 

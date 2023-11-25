@@ -29,6 +29,7 @@
     {% endfor %}
 </table>
   {% else %}
+   <th><a href="{% url 'bboard:post_add' %}">Create a new post</a></th>
    <h2> No posts! </h2>
   {% endif %}
 

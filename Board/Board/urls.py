@@ -21,7 +21,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('bboard/', include('bboard.urls')),
     path('', include('protect.urls')),
-    path('sign/', include('sign.urls')),
 
 
 

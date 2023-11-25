@@ -1,6 +1,5 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="email" name="email" placeholder="your email">
     <input type="submit" value="Register">
 </form>

@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import PostList, PostDetail, PostCreate, PostUpdate, confirmation, register
+from django.contrib.auth.views import LoginView, LogoutView
 
 
 app_name='bboard'
@@ -10,4 +11,7 @@ urlpatterns = [
     path('<int:pk>/update/', PostUpdate.as_view(), name='post_edit'),
     path('register/', register, name='register'),
     path('confirm/<str:confirmation_code>/', confirmation, name='confirm'),
+    path('login/', LoginView.as_view(template_name='sign/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='sign/logout.html'), name='logout'),
+
 ]

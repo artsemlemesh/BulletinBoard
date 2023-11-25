@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .models import Post
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .forms import PostForm
+from .forms import PostForm, MyUserCreationForm
 from django.contrib.auth.forms import UserCreationForm
 from .models import DisposableCode
 from django.core.mail import send_mail
@@ -40,7 +40,7 @@ class PostCreate(CreateView):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         print('register FUNCTION')
         if form.is_valid():
             user = form.save()
@@ -49,7 +49,7 @@ def register(request):
             print('send_confirmation_email')
             return HttpResponseRedirect('/')
     else:
-        form = UserCreationForm()
+        form = MyUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
 def generate_unique_code():
@@ -63,7 +63,7 @@ def generate_unique_code():
 def send_confirmation_email(user, confirmation_code):
     subject = 'Account confirmation email'
     message = f'Hello {user.username}, \n\nPlease confirm your registration by clicking the following link:\n\nhttp://127.0.0.1:8000/bboard/confirm/{confirmation_code}'
-    send_mail(subject, message, ['Artsemlemesh@yandex.by'], ['bublikteam1@gmail.com'])
+    send_mail(subject, message, ['Artsemlemesh@yandex.by'], [user.email])
     print('send_confirmation_email function')
 
 
