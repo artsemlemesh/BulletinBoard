@@ -11,6 +11,7 @@ import random
 import secrets
 from django.contrib.auth import authenticate, login
 from django.dispatch import receiver
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class PostList(ListView):
     model = Post
@@ -25,17 +26,18 @@ class PostDetail(DetailView):
 
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'post_update.html'
+    permission_required = ('bboard.change_post')
 
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
-    #permission_required = check later
+    permission_required = ('bboard.change_post')
 
 
 def register(request):
