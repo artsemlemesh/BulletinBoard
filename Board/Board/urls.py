@@ -24,5 +24,5 @@ urlpatterns = [
 
 
 
-    path('a', include('django.contrib.flatpages.urls')),
+    # path('', include('django.contrib.flatpages.urls')),
 ]

@@ -1,10 +1,10 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .models import Post
+from .models import Post, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .forms import PostForm, MyUserCreationForm
+from .forms import PostForm, MyUserCreationForm, CommentForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import DisposableCode
+from .models import DisposableCode, Author
 from django.core.mail import send_mail
 import random
 # from .signals import send_confirmation_email
@@ -39,6 +39,15 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     template_name = 'post_create.html'
     permission_required = ('bboard.change_post')
 
+class CommentCreate(CreateView):
+    form_class = CommentForm
+    model = Comment
+    template_name = 'comment_create.html'
+
+class CommentDetail(DetailView):
+    model = Comment
+    template_name = 'comment.html'
+    context_object_name = 'comment'
 
 def register(request):
     if request.method == 'POST':
@@ -80,6 +89,8 @@ def confirmation(request, confirmation_code):
     print('CONFIRMATION')
     disposable_code.user.is_active = True
     disposable_code.user.save()
+    # author = Author(user=disposable_code.user)
+    # author.save()
     disposable_code.delete()
     return render(request, 'registration/confirmation_success.html')
     # except DisposableCode.DoesNotExist:
@@ -89,7 +100,8 @@ def confirmation(request, confirmation_code):
 
 
 
-
+# def comment(request):
+#
 
 
 

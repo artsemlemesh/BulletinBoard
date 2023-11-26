@@ -36,6 +36,9 @@ class Comment(models.Model):
     def __str__(self):
         return f'Reaction on {self.author}\'s {self.post}'
 
+    def get_absolute_url(self):
+        return reverse('bboard:comment_detail', args=[str(self.id)])
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
 

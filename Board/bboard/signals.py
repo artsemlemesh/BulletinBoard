@@ -1,10 +1,28 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import DisposableCode
+from .models import DisposableCode, Comment
 from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
-from django.dispatch import Signal
+from django.db.models.signals import m2m_changed
+
+@receiver(post_save, sender=Comment)
+def notify_about_comment(sender, instance, created, **kwargs):
+    if created:
+        print('notify about comment signal')
+        author = instance.author
+        post = instance.post
+        text = instance.text
+        subject = 'new comment'
+        message = f'hello {author.user.username}, here is a comment {text} for your post {post}'
+        send_mail(subject, message, ['artsemlemesh@yandex.by'], [author.user.email])
+
+
+
+
+
+
+
 
 # @receiver(post_save, sender=DisposableCode)
 # def send_confirmation_email(sender, instance, created, **kwargs):

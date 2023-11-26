@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 from django.forms.widgets import FileInput, TextInput, ClearableFileInput
 from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth.forms import UserCreationForm
@@ -23,3 +23,9 @@ class MyUserCreationForm(UserCreationForm):
         model = User
         fields = ['email', 'username']
 
+
+class CommentForm(forms.ModelForm):
+    text = forms.CharField(min_length=10)
+    class Meta:
+        model = Comment
+        fields = ['author', 'post', 'text']

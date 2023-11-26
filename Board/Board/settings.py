@@ -161,7 +161,7 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-LOGIN_URL = 'sign/login/'
+LOGIN_URL = 'bboard/login/'
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_HOST = 'smtp.yandex.by'
