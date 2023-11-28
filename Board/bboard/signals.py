@@ -14,15 +14,27 @@ def notify_about_comment(sender, instance, created, **kwargs):
         post = instance.post
         text = instance.text
         subject = 'new comment'
-        message = f'hello {author.user.username}, here is a comment {text} for your post {post}'
+        message = f'hello /{author.user.username}/, here is a comment:: /{text}/ for your post:: /{post}/'
         send_mail(subject, message, ['artsemlemesh@yandex.by'], [author.user.email])
 
 
 
+@receiver(post_save, sender=Comment)
+def notify_on_comment_acceptance(sender, instance, created, **kwargs):
+    old_status = Comment.objects.get(pk=instance.pk).status
+    if not old_status and instance.status == False:
+        return
+    print('notify_on_comment_acceptance')
+    sender = instance.author.user.email #something is wrong here, it sends and received by the same person
+    recipient = instance.post.author.user.email
 
+    send_notification(sender, [recipient], instance)
 
-
-
+def send_notification(sender, recipient, comment):
+    email_subject = 'Comment accepted'
+    print('send_notification')
+    email_message = f'your comment of the post {comment.text} has been accepted'
+    send_mail(email_subject, email_message, sender, [recipient])
 
 # @receiver(post_save, sender=DisposableCode)
 # def send_confirmation_email(sender, instance, created, **kwargs):

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post, Comment
+from .models import Post, Comment, Author
 from django.forms.widgets import FileInput, TextInput, ClearableFileInput
 from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth.forms import UserCreationForm
@@ -23,9 +23,43 @@ class MyUserCreationForm(UserCreationForm):
         model = User
         fields = ['email', 'username']
 
+    # def save(self, request, commit=True):
+    #     user = super().save(commit=False)
+    #     user.is_active = False  # Set user as inactive initially
+    #
+    #     if commit:
+    #         user.save()
+    #
+    #         # Create Author instance for the user
+    #         author = Author(user=user)
+    #         author.save()
+    #
+    #         # Add the user to the 'basic' group
+    #         basic_group = Group.objects.get(name='basic')
+    #         basic_group.user_set.add(user)
+    #
+    #     return user
+
 
 class CommentForm(forms.ModelForm):
     text = forms.CharField(min_length=10)
     class Meta:
         model = Comment
         fields = ['author', 'post', 'text']
+
+
+# from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
+#
+#
+# class BasicSignupForm(SignupForm):
+#     def save(self, request, commit=True):
+#         user = super().save(commit=False)
+#         user.is_active = False
+#         if commit:
+#             user.save()
+#             author = Author(user=user)
+#             author.save()
+#             basic_group = Group.objects.get(name='basic')
+#             basic_group.user_set.add(user)
+#         return user

@@ -1,9 +1,11 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters import FilterSet
 
 from bboard.models import Post, Comment
+
 
 class PostFilter(FilterSet):
     class Meta:
@@ -20,7 +22,7 @@ class IndexView(LoginRequiredMixin, ListView):
     context_object_name = 'comments'
 
     def get_queryset(self):
-        queryset = Comment.objects.filter(post__author__user_id=self.request.user.id)
+        queryset = Comment.objects.filter(post__author__user_id=self.request.user.id).order_by('-date')
         self.filterset = PostFilter(self.request.GET, queryset, request=self.request.user.id)
         if self.request.GET:
             return self.filterset.qs
@@ -31,3 +33,15 @@ class IndexView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         return context
+
+    def delete_comment(request, comment_id):
+        comment = Comment.objects.get(pk=comment_id)
+        comment.delete()
+        return HttpResponseRedirect('/')
+
+    def accept_comment(request, comment_id):
+        comment = Comment.objects.get(pk=comment_id)
+        comment.status = True
+        comment.save()
+
+        return HttpResponseRedirect('/')

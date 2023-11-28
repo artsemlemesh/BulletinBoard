@@ -1,6 +1,5 @@
 {% extends 'main.html' %}
 
-
 {% block content %}
 <h2>page of authorised user {{ request.user.username }}</h2>
 <form action="" method="get">
@@ -9,11 +8,14 @@
 </form>
 <hr>
 <button><a href="/">discard filter</a></button>
+
 <h4>comments</h4>
 {% if comments %}
 {% for comment in comments %}
 {{ comment.author }}
 {{ comment.text }}
+<a href="{% url 'protect:delete' comment.id%}">delete</a>
+<a href="{% url 'protect:accept' comment.id %}">accept</a>
 {% endfor %}
 {% endif %}
 

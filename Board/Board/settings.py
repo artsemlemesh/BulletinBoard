@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'bboard',
     'protect',
     'django_filters',
-
     'ckeditor_uploader', #custom TextField
     'ckeditor',
 
@@ -65,6 +64,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
+
+
+
 ROOT_URLCONF = "Board.urls"
 
 TEMPLATES = [
@@ -78,6 +81,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+
             ],
         },
     },
@@ -173,3 +177,5 @@ SITE_URL = "http://127.0.0.1:8000"
 DEFAULT_FROM_EMAIL = 'Artsemlemesh@yandex.by'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'} for groups

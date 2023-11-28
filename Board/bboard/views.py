@@ -1,5 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from rest_framework.authentication import BaseAuthentication
+
 from .models import Post, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .forms import PostForm, MyUserCreationForm, CommentForm
@@ -12,6 +14,8 @@ import secrets
 from django.contrib.auth import authenticate, login
 from django.dispatch import receiver
 from django.contrib.auth.mixins import PermissionRequiredMixin
+
+
 
 class PostList(ListView):
     model = Post
@@ -37,7 +41,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
-    permission_required = ('bboard.change_post')
+    permission_required = ('bboard.add_post')
 
 class CommentCreate(CreateView):
     form_class = CommentForm
@@ -57,7 +61,11 @@ def register(request):
             user = form.save()
             disposable_code = DisposableCode.objects.create(user=user, code = generate_unique_code())
             send_confirmation_email(user, disposable_code.code)
+            author = Author(user=user)
+            author.save()
             print('send_confirmation_email')
+            user.is_active = False
+            user.save()
             return HttpResponseRedirect('/')
     else:
         form = MyUserCreationForm()
@@ -81,27 +89,25 @@ def send_confirmation_email(user, confirmation_code):
 
 
 
-
-
 def confirmation(request, confirmation_code):
-    # try:
-    disposable_code = DisposableCode.objects.get(code=confirmation_code)
-    print('CONFIRMATION')
-    disposable_code.user.is_active = True
-    disposable_code.user.save()
-    # author = Author(user=disposable_code.user)
-    # author.save()
-    disposable_code.delete()
-    return render(request, 'registration/confirmation_success.html')
-    # except DisposableCode.DoesNotExist:
-    #     return render(request, 'registration/confirmation_error.html')
+    try:
+        disposable_code = DisposableCode.objects.get(code=confirmation_code)
+        print('CONFIRMATION')
+        disposable_code.user.is_active = True
+        disposable_code.user.save()
+        # author = Author(user=disposable_code.user)
+        # author.save()
+        disposable_code.delete()
+
+        return render(request, 'registration/confirmation_success.html')
+    except DisposableCode.DoesNotExist:
+        return render(request, 'registration/confirmation_error.html')
 
 
 
 
 
-# def comment(request):
-#
+
 
 
 
