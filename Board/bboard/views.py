@@ -16,7 +16,6 @@ from django.dispatch import receiver
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
-
 class PostList(ListView):
     model = Post
     template_name = 'posts.html'
@@ -36,18 +35,18 @@ class PostUpdate(PermissionRequiredMixin, UpdateView):
     template_name = 'post_update.html'
     permission_required = ('bboard.change_post')
 
-
 class PostCreate(PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
     permission_required = ('bboard.add_post')
 
-class CommentCreate(CreateView):
+
+class CommentCreate(PermissionRequiredMixin, CreateView):
     form_class = CommentForm
     model = Comment
     template_name = 'comment_create.html'
-
+    permission_required = ('bboard.add_post')
 class CommentDetail(DetailView):
     model = Comment
     template_name = 'comment.html'

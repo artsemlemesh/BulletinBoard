@@ -23,22 +23,13 @@ class MyUserCreationForm(UserCreationForm):
         model = User
         fields = ['email', 'username']
 
-    # def save(self, request, commit=True):
-    #     user = super().save(commit=False)
-    #     user.is_active = False  # Set user as inactive initially
-    #
-    #     if commit:
-    #         user.save()
-    #
-    #         # Create Author instance for the user
-    #         author = Author(user=user)
-    #         author.save()
-    #
-    #         # Add the user to the 'basic' group
-    #         basic_group = Group.objects.get(name='basic')
-    #         basic_group.user_set.add(user)
-    #
-    #     return user
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            basic_group = Group.objects.get(name='basic')
+            basic_group.user_set.add(user)
+        return user
 
 
 class CommentForm(forms.ModelForm):

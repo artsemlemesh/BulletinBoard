@@ -1,11 +1,12 @@
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters import FilterSet
 
 from bboard.models import Post, Comment
-
+from django.contrib.auth.models import Group
 
 class PostFilter(FilterSet):
     class Meta:
@@ -43,5 +44,6 @@ class IndexView(LoginRequiredMixin, ListView):
         comment = Comment.objects.get(pk=comment_id)
         comment.status = True
         comment.save()
-
         return HttpResponseRedirect('/')
+
+
