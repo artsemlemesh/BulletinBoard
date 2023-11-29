@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostList, PostDetail, PostCreate,CommentCreate, CommentDetail, PostUpdate, confirmation, register
+from .views import PostList, PostDetail, PostCreate,CommentCreate, CommentDetail, CategoryListView, PostUpdate, confirmation, register, subscribe
 from django.contrib.auth.views import LoginView, LogoutView
 
 
@@ -15,5 +15,7 @@ urlpatterns = [
     path('confirm/<str:confirmation_code>/', confirmation, name='confirm'),
     path('login/', LoginView.as_view(template_name='sign/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='sign/logout.html'), name='logout'),
+    path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),
+    path('categories/<int:pk>/subscribe', subscribe, name='subscribe')
 
 ]

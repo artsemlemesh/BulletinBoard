@@ -1,5 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from Board import settings
 from .models import DisposableCode, Comment
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -10,12 +12,12 @@ from django.db.models.signals import m2m_changed
 def notify_about_comment(sender, instance, created, **kwargs):
     if created:
         print('notify about comment signal')
-        author = instance.author
+        author = instance.post.author.user
         post = instance.post
         text = instance.text
         subject = 'new comment'
-        message = f'hello /{author.user.username}/, here is a comment:: /{text}/ for your post:: /{post}/'
-        send_mail(subject, message, ['artsemlemesh@yandex.by'], [author.user.email])
+        message = f'hello /{author.username}/, here is a comment:: /{text}/ for your post:: /{post}/'
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [author.email])
 
 
 
@@ -25,8 +27,8 @@ def notify_on_comment_acceptance(sender, instance, created, **kwargs):
     if not old_status and instance.status == False:
         return
     print('notify_on_comment_acceptance')
-    sender = instance.author.user.email #something is wrong here, it sends and received by the same person
-    recipient = instance.post.author.user.email
+    sender = settings.DEFAULT_FROM_EMAIL #something is wrong here, it sends and received by the same person
+    recipient = instance.author.user.email
 
     send_notification(sender, [recipient], instance)
 

@@ -40,6 +40,11 @@ class IndexView(LoginRequiredMixin, ListView):
         comment.delete()
         return HttpResponseRedirect('/')
 
+    # class PostDelete(DeleteView):
+    #     model = Post
+    #     template_name = 'post_delete.html'
+    #     success_url = reverse_lazy('post_list')
+
     def accept_comment(request, comment_id):
         comment = Comment.objects.get(pk=comment_id)
         comment.status = True

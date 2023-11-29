@@ -6,7 +6,7 @@ from .models import Post, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .forms import PostForm, MyUserCreationForm, CommentForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import DisposableCode, Author
+from .models import DisposableCode, Author, Category
 from django.core.mail import send_mail
 import random
 # from .signals import send_confirmation_email
@@ -14,8 +14,8 @@ import secrets
 from django.contrib.auth import authenticate, login
 from django.dispatch import receiver
 from django.contrib.auth.mixins import PermissionRequiredMixin
-
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 class PostList(ListView):
     model = Post
     template_name = 'posts.html'
@@ -105,10 +105,31 @@ def confirmation(request, confirmation_code):
 
 
 
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    # author = user.author#delete
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)#user
+    message = 'you have successfully subscribed to category'
+    return render(request, 'subscribe.html', {'category': category, 'message': message})
 
 
+class CategoryListView(PostList):
+    model = Post
+    template_name = 'category_list.html'
+    context_object_name = 'category_list'
 
+    def get_queryset(self, *args, **kwargs):
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(category=self.category)
+        return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        context['category'] = self.category
+        return context
 
 
 

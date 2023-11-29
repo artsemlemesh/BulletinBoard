@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader', #custom TextField
     'ckeditor',
 
+    'django_apscheduler',
     'django.contrib.sites',
     'django.contrib.flatpages', #=static pages are not associated with any database or url.Typically for 'about us', 'contact us'
     'fpages', #extension of previous, provides additional features
@@ -179,3 +180,5 @@ DEFAULT_FROM_EMAIL = 'Artsemlemesh@yandex.by'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'} for groups
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
