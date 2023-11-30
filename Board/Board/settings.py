@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'bboard',
     'protect',
     'django_filters',
-    'ckeditor_uploader', #custom TextField
-    'ckeditor',
+    # 'ckeditor_uploader', #custom TextField
+    # 'ckeditor',
 
     'django_apscheduler',
     'django.contrib.sites',

@@ -4,20 +4,14 @@ from django.utils import timezone
 
 from django.db import models
 from django.contrib.auth.models import User
-from ckeditor.fields import RichTextField
 from django.urls import reverse
 
-class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.user)
 
 
 class Post(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    text = RichTextField()
+    text = models.TextField()
     category = models.ManyToManyField('Category', through='PostCategory')
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='image/', blank=True)
@@ -28,7 +22,7 @@ class Post(models.Model):
         return reverse('bboard:post_detail', args=[str(self.id)])
 
 class Comment(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text = models.TextField()
     status = models.BooleanField(default=False)
@@ -42,7 +36,7 @@ class Comment(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255, default='Name_of_category', unique=True)
-    subscribers = models.ManyToManyField(Author, blank=True, related_name='categories')
+    subscribers = models.ManyToManyField(User, blank=True, related_name='categories')
     def __str__(self):
         return self.name
 

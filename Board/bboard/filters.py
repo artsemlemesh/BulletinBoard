@@ -11,7 +11,7 @@ class PostFilter(FilterSet):
 
     class Meta:
         model = Comment
-        fields = ('post')
+        fields = ('post',)
 
     def __init__(self, *args, **kwargs):
         super(PostFilter, self).__init__(*args, **kwargs)

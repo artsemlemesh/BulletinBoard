@@ -15,7 +15,7 @@ class PostFilter(FilterSet):
 
     def __init__(self, *args, **kwargs):
         super(PostFilter, self).__init__(*args, **kwargs)
-        self.filters['post'].queryset = Post.objects.filter(author__user_id=kwargs['request'])
+        self.filters['post'].queryset = Post.objects.filter(author_id=kwargs['request'])
 
 class IndexView(LoginRequiredMixin, ListView):
     model = Comment
@@ -23,7 +23,7 @@ class IndexView(LoginRequiredMixin, ListView):
     context_object_name = 'comments'
 
     def get_queryset(self):
-        queryset = Comment.objects.filter(post__author__user_id=self.request.user.id).order_by('-date')
+        queryset = Comment.objects.filter(post__author_id=self.request.user.id).order_by('-date')
         self.filterset = PostFilter(self.request.GET, queryset, request=self.request.user.id)
         if self.request.GET:
             return self.filterset.qs

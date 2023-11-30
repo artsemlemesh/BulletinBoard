@@ -1,7 +1,7 @@
 from django import forms
-from .models import Post, Comment, Author
+from .models import Post, Comment
 from django.forms.widgets import FileInput, TextInput, ClearableFileInput
-from ckeditor.widgets import CKEditorWidget
+# from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -10,12 +10,12 @@ class PostForm(forms.ModelForm):
     text = forms.CharField(min_length=10)
     class Meta:
         model = Post
-        fields = ['author', 'title', 'text', 'category']
+        fields = ['title', 'text', 'category']
 
-    widgets = {
-        'title': TextInput(attrs={'class': 'form-control'}),
-        'text': CKEditorWidget(attrs={'class': 'form-control'}),
-    }
+    # widgets = {
+    #     'title': TextInput(attrs={'class': 'form-control'}),
+    #     'text': CKEditorWidget(attrs={'class': 'form-control'}),
+    # }
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -36,7 +36,7 @@ class CommentForm(forms.ModelForm):
     text = forms.CharField(min_length=10)
     class Meta:
         model = Comment
-        fields = ['author', 'post', 'text']
+        fields = [ 'post', 'text']
 
 
 # from allauth.account.forms import SignupForm

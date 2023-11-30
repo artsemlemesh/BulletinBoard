@@ -6,14 +6,14 @@ from .models import Post, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .forms import PostForm, MyUserCreationForm, CommentForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import DisposableCode, Author, Category
+from .models import DisposableCode, Category
 from django.core.mail import send_mail
 import random
 # from .signals import send_confirmation_email
 import secrets
 from django.contrib.auth import authenticate, login
 from django.dispatch import receiver
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 class PostList(ListView):
@@ -29,24 +29,36 @@ class PostDetail(DetailView):
 
 
 
-class PostUpdate(PermissionRequiredMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'post_update.html'
-    permission_required = ('bboard.change_post')
 
-class PostCreate(PermissionRequiredMixin, CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
-    permission_required = ('bboard.add_post')
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        form.instance.author = self.request.user
+        post.save()
+        return super().form_valid(form)
 
 
-class CommentCreate(PermissionRequiredMixin, CreateView):
+class CommentCreate(LoginRequiredMixin, CreateView):
     form_class = CommentForm
     model = Comment
     template_name = 'comment_create.html'
-    permission_required = ('bboard.add_post')
+
+
+#check about form valid later
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        form.instance.author = self.request.user
+        comment.save()
+        return super().form_valid(form)
+
 class CommentDetail(DetailView):
     model = Comment
     template_name = 'comment.html'
@@ -60,8 +72,7 @@ def register(request):
             user = form.save()
             disposable_code = DisposableCode.objects.create(user=user, code = generate_unique_code())
             send_confirmation_email(user, disposable_code.code)
-            author = Author(user=user)
-            author.save()
+
             print('send_confirmation_email')
             user.is_active = False
             user.save()

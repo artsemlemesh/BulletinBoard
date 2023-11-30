@@ -12,7 +12,7 @@ from django.db.models.signals import m2m_changed
 def notify_about_comment(sender, instance, created, **kwargs):
     if created:
         print('notify about comment signal')
-        author = instance.post.author.user
+        author = instance.post.author
         post = instance.post
         text = instance.text
         subject = 'new comment'
@@ -28,7 +28,7 @@ def notify_on_comment_acceptance(sender, instance, created, **kwargs):
         return
     print('notify_on_comment_acceptance')
     sender = settings.DEFAULT_FROM_EMAIL #something is wrong here, it sends and received by the same person
-    recipient = instance.author.user.email
+    recipient = instance.author.email
 
     send_notification(sender, [recipient], instance)
 
