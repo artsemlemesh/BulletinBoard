@@ -26,6 +26,9 @@
             <th style="background-color: #29ABCA; color: #ffffff;">{{ 'Author' }}</th>
             <th style="background-color: #FFC107; color: #000000;">{{ 'Title' }}</th>
             <th style="background-color: #29ABCA; color: #ffffff;">{{ 'Text' }}</th>
+            <th style="background-color: #FFC107; color: #000000;">{{ 'Image' }}</th>
+            <th style="background-color: #29ABCA; color: #ffffff;">{{ 'Category' }}</th>
+
         </tr>
     </thead>
     {% for post in posts %}
@@ -34,6 +37,12 @@
             <td>{{ post.author }}</td>
             <td><a href="{% url 'bboard:post_detail' post.id %}">{{ post.title }}</a></td>
             <td><a href="{% url 'bboard:post_edit' post.id %}">{{ post.text }}</a></td>
+            <td><img src="{{ post.media.image.url }}" alt="{{ post.title }}" /></td>
+            <td>
+                        {% for category in post.category.all %}
+                        <a href="{% url 'bboard:category_list' category.id %}">{{category}}</a>
+                        {% endfor %}
+                    </td>
         </tr>
     </tbody>
     {% endfor %}

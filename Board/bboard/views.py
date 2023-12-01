@@ -92,7 +92,7 @@ def generate_unique_code():
 def send_confirmation_email(user, confirmation_code):
     subject = 'Account confirmation email'
     message = f'Hello {user.username}, \n\nPlease confirm your registration by clicking the following link:\n\nhttp://127.0.0.1:8000/bboard/confirm/{confirmation_code}'
-    send_mail(subject, message, ['Artsemlemesh@yandex.by'], [user.email])
+    send_mail(subject, message, ['noreply@example.com'], [user.email])
     print('send_confirmation_email function')
 
 

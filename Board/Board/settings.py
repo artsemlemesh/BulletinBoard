@@ -182,3 +182,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'} for groups
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'media'),
+]

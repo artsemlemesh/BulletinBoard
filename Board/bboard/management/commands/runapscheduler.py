@@ -10,52 +10,57 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-
-from bboard.models import Post, Category
+from django.core.mail import send_mail
+from django.urls import reverse
+from bboard.models import Post, Category, PostCategory
 
 logger = logging.getLogger(__name__)
+
 
 
 def my_job():
     today = datetime.datetime.now()
     last_week = today - datetime.timedelta(days=7)
+
     posts = Post.objects.filter(date__gte=last_week)
-    categories = set(post.category for post in posts)
-    subscribers = set(Category.objects.filter(name__in=categories).value_list('subscribers__email', flat=True))
-    html_content = render_to_string(
-        'weekly_post.html',
-        {
-            'link': settings.SITE_URL,
-            'posts': posts
+    recipients = []
+    for post in posts:
+        for category in post.category.all():
+            for subscriber in category.subscribers.all():
+                recipients.append(subscriber.username)
+
+    # Deduplicate recipients
+    recipients = set(recipients)
+
+
+
+    for recipient in recipients:
+        subject = f"New Posts for the Week  of {last_week.strftime('%b %d, %Y')}"
+        message = f"Hi {recipient},\n\nHere are the new posts for the week of {last_week.strftime('%b %d, %Y')}:\n\n"
+
+        post_data = []
+
+        for post in posts:
+            post_url = reverse('bboard:post_detail', args=[str(post.id)])
+
+            post_data.append({
+                'title': post.title,
+                'author': post.author,
+                'url': post_url,
+            })
+
+        context = {
+            'subject': subject,
+            'message': message,
+            'posts': post_data,
         }
-    )
 
-    msg = EmailMultiAlternatives(
-        subject='Posts for the week',
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers
-
-    )
-
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
-
-
-
-
-
-
-
-
-
-
-
-
+        html_message = render_to_string('weekly_post.html', context)
+        send_mail(subject, html_message, 'noreply@example.com', [recipients], fail_silently=False,
+                  html_message=html_message)
 
 
 def delete_old_job_executions(max_age=604_800):
-    """This job deletes all apscheduler job executions older than `max_age` from the database."""
     DjangoJobExecution.objects.delete_old_job_executions(max_age)
 
 
@@ -69,8 +74,7 @@ class Command(BaseCommand):
         scheduler.add_job(
             my_job,
             trigger=CronTrigger(second="*/10"),
-            # То же, что и интервал, но задача тригера таким образом более понятна django
-            id="my_job",  # уникальный айди
+            id="my_job",
             max_instances=1,
             replace_existing=True,
         )
@@ -81,7 +85,6 @@ class Command(BaseCommand):
             trigger=CronTrigger(
                 day_of_week="mon", hour="00", minute="00"
             ),
-            # Каждую неделю будут удаляться старые задачи, которые либо не удалось выполнить, либо уже выполнять не надо.
             id="delete_old_job_executions",
             max_instances=1,
             replace_existing=True,

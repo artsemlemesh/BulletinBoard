@@ -10,7 +10,7 @@ class PostForm(forms.ModelForm):
     text = forms.CharField(min_length=10)
     class Meta:
         model = Post
-        fields = ['title', 'text', 'category']
+        fields = ['title', 'text', 'image', 'category']
 
     # widgets = {
     #     'title': TextInput(attrs={'class': 'form-control'}),
