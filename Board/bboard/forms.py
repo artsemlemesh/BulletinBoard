@@ -1,21 +1,22 @@
 from django import forms
 from .models import Post, Comment
 from django.forms.widgets import FileInput, TextInput, ClearableFileInput
-# from ckeditor.widgets import CKEditorWidget
+from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
 class PostForm(forms.ModelForm):
-    text = forms.CharField(min_length=10)
+    # text = forms.CharField(min_length=10, widget=CKEditorUploadingWidget())
     class Meta:
         model = Post
         fields = ['title', 'text', 'image', 'category']
 
-    # widgets = {
-    #     'title': TextInput(attrs={'class': 'form-control'}),
-    #     'text': CKEditorWidget(attrs={'class': 'form-control'}),
-    # }
+    widgets = {
+        'title': TextInput(attrs={'class': 'form-control'}),
+        'text': CKEditorWidget(attrs={'class': 'form-control'}),
+    }
 
 
 class MyUserCreationForm(UserCreationForm):

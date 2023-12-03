@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 from django.utils import timezone
 
-
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -11,7 +11,8 @@ from django.urls import reverse
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    text = models.TextField()
+    # text = models.CharField(max_length=255)
+    text = RichTextField()
     category = models.ManyToManyField('Category', through='PostCategory')
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='image/', blank=True)

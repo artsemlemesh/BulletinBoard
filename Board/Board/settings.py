@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'bboard',
     'protect',
     'django_filters',
-    # 'ckeditor_uploader', #custom TextField
-    # 'ckeditor',
+    'ckeditor_uploader', #custom TextField
+    'ckeditor',
 
     'django_apscheduler',
     'django.contrib.sites',
@@ -142,6 +142,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'media'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -161,10 +164,13 @@ CKEDITOR_CONFIGS = {
 
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = os.path.join(BASE_DIR, 'images')
+
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 LOGIN_URL = 'bboard/login/'
 LOGIN_REDIRECT_URL = '/'
@@ -184,10 +190,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL = '/media/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'media'),
-]
