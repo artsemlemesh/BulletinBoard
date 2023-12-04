@@ -8,15 +8,15 @@ from django.contrib.auth.models import User
 
 
 class PostForm(forms.ModelForm):
-    # text = forms.CharField(min_length=10, widget=CKEditorUploadingWidget())
+    text = forms.CharField(min_length=10, widget=CKEditorUploadingWidget())
     class Meta:
         model = Post
-        fields = ['title', 'text', 'image', 'category']
+        fields = ['title', 'text', 'category']
 
-    widgets = {
-        'title': TextInput(attrs={'class': 'form-control'}),
-        'text': CKEditorWidget(attrs={'class': 'form-control'}),
-    }
+    # widgets = {
+    #     'title': TextInput(attrs={'class': 'form-control'}),
+    #     'text': CKEditorWidget(attrs={'class': 'form-control'}),
+    # }
 
 
 class MyUserCreationForm(UserCreationForm):

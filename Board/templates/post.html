@@ -12,7 +12,6 @@
             <th style="background-color: #FFC107; color: #000000;">{{ 'Title' }}</th>
             <th style="background-color: #3498DB; color: #ffffff;">{{ 'Text' }}</th>
             <th style="background-color: #FFC107; color: #000000;">{{ 'Comment' }}</th>
-            <th style="background-color: #FFC107; color: #000000;">{{ 'Image' }}</th>
 
 
         </tr>
@@ -21,9 +20,8 @@
         <tr>
             <td>{{ post.author }}</td>
             <td>{{ post.title }}</td>
-            <td>{{ post.text }}</td>
+            <td>{{ post.text|safe }}</td>
             <td><a href="{% url 'bboard:comment_add'   %}">add</a></td>
-    <td><img src="{{ post.media.image.url }}" alt="{{ post.title }}" /></td>
 
 
         </tr>

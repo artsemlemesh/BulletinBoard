@@ -164,7 +164,7 @@ CKEDITOR_CONFIGS = {
 
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
-CKEDITOR_IMAGE_BACKEND = os.path.join(BASE_DIR, 'images')
+# CKEDITOR_IMAGE_BACKEND = os.path.join(BASE_DIR, 'images')
 
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
