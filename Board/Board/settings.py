@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'bboard',
     'protect',
     'django_filters',
-    'ckeditor_uploader', #custom TextField
+    'ckeditor_uploader',
     'ckeditor',
 
     'django_apscheduler',
@@ -142,9 +142,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'media'),
-# ]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -164,7 +162,6 @@ CKEDITOR_CONFIGS = {
 
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
-# CKEDITOR_IMAGE_BACKEND = os.path.join(BASE_DIR, 'images')
 
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -177,15 +174,13 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_HOST = 'smtp.yandex.by'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'Artsemlemesh'
-EMAIL_HOST_PASSWORD = 'enjnbjhqjinpomwh'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True
 SITE_URL = "http://127.0.0.1:8000"
-DEFAULT_FROM_EMAIL = 'Artsemlemesh@yandex.by'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# ACCOUNT_FORMS = {'signup': 'protect.forms.BasicSignupForm'} for groups
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 

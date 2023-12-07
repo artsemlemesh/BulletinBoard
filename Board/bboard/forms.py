@@ -1,10 +1,9 @@
 from django import forms
 from .models import Post, Comment
-from django.forms.widgets import FileInput, TextInput, ClearableFileInput
-from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 
 class PostForm(forms.ModelForm):
@@ -13,10 +12,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'text', 'category']
 
-    # widgets = {
-    #     'title': TextInput(attrs={'class': 'form-control'}),
-    #     'text': CKEditorWidget(attrs={'class': 'form-control'}),
-    # }
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -40,18 +35,3 @@ class CommentForm(forms.ModelForm):
         fields = [ 'post', 'text']
 
 
-# from allauth.account.forms import SignupForm
-from django.contrib.auth.models import Group
-#
-#
-# class BasicSignupForm(SignupForm):
-#     def save(self, request, commit=True):
-#         user = super().save(commit=False)
-#         user.is_active = False
-#         if commit:
-#             user.save()
-#             author = Author(user=user)
-#             author.save()
-#             basic_group = Group.objects.get(name='basic')
-#             basic_group.user_set.add(user)
-#         return user

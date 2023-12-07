@@ -1,26 +1,18 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
-from rest_framework.authentication import BaseAuthentication
-
+from django.shortcuts import render
+import secrets
 from .models import Post, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .forms import PostForm, MyUserCreationForm, CommentForm
-from django.contrib.auth.forms import UserCreationForm
 from .models import DisposableCode, Category
 from django.core.mail import send_mail
-import random
-# from .signals import send_confirmation_email
-import secrets
-from django.contrib.auth import authenticate, login
-from django.dispatch import receiver
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 class PostList(ListView):
     model = Post
     template_name = 'posts.html'
     context_object_name = 'posts'
-    #paginate_by = 4
 
 class PostDetail(DetailView):
     model = Post
@@ -52,7 +44,6 @@ class CommentCreate(LoginRequiredMixin, CreateView):
     template_name = 'comment_create.html'
 
 
-#check about form valid later
     def form_valid(self, form):
         comment = form.save(commit=False)
         form.instance.author = self.request.user
@@ -67,13 +58,10 @@ class CommentDetail(DetailView):
 def register(request):
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST)
-        print('register FUNCTION')
         if form.is_valid():
             user = form.save()
             disposable_code = DisposableCode.objects.create(user=user, code = generate_unique_code())
             send_confirmation_email(user, disposable_code.code)
-
-            print('send_confirmation_email')
             user.is_active = False
             user.save()
             return HttpResponseRedirect('/')
@@ -84,7 +72,6 @@ def register(request):
 def generate_unique_code():
     while True:
         code = secrets.token_urlsafe(10)
-        print('generate_unique_code FUNCTION')
         if not DisposableCode.objects.filter(code=code).exists():
             break
     return code
@@ -93,7 +80,6 @@ def send_confirmation_email(user, confirmation_code):
     subject = 'Account confirmation email'
     message = f'Hello {user.username}, \n\nPlease confirm your registration by clicking the following link:\n\nhttp://127.0.0.1:8000/bboard/confirm/{confirmation_code}'
     send_mail(subject, message, ['noreply@example.com'], [user.email])
-    print('send_confirmation_email function')
 
 
 
@@ -102,11 +88,8 @@ def send_confirmation_email(user, confirmation_code):
 def confirmation(request, confirmation_code):
     try:
         disposable_code = DisposableCode.objects.get(code=confirmation_code)
-        print('CONFIRMATION')
         disposable_code.user.is_active = True
         disposable_code.user.save()
-        # author = Author(user=disposable_code.user)
-        # author.save()
         disposable_code.delete()
 
         return render(request, 'registration/confirmation_success.html')
@@ -119,9 +102,8 @@ def confirmation(request, confirmation_code):
 @login_required
 def subscribe(request, pk):
     user = request.user
-    # author = user.author#delete
     category = Category.objects.get(id=pk)
-    category.subscribers.add(user)#user
+    category.subscribers.add(user)
     message = 'you have successfully subscribed to category'
     return render(request, 'subscribe.html', {'category': category, 'message': message})
 
