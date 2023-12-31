@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django_filters',
     'ckeditor_uploader',
     'ckeditor',
-
+    'django_extensions',
     'django_apscheduler',
     'django.contrib.sites',
     'django.contrib.flatpages', #=static pages are not associated with any database or url.Typically for 'about us', 'contact us'
