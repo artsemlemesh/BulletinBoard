@@ -8,3 +8,6 @@ class BasicSignupForm(SignupForm):
         basic_group = Group.objects.get(name='basic')
         basic_group.user_set.add(user)
         return user
+
+
+    ##################
