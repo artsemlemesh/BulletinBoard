@@ -31,6 +31,6 @@ urlpatterns = [
     re_path(r'^upload/', login_required(upload), name='ckeditor_upload'),
     re_path(r'^browse/', login_required(never_cache(browse)), name='ckeditor_browse'),
 
-
+#t
     # path('', include('django.contrib.flatpages.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
