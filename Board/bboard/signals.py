@@ -6,16 +6,16 @@ from .models import Comment
 from django.core.mail import send_mail
 
 
-@receiver(post_save, sender=Comment)
-def notify_about_comment(sender, instance, created, **kwargs):
-    if created:
-        author = instance.post.author
-        post = instance.post
-        text = instance.text
-        subject = 'new comment'
-        message = f'hello /{author.username}/, here is a comment:: /{text}/ for your post:: /{post}/'
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [author.email])
-
+# @receiver(post_save, sender=Comment)
+# def notify_about_comment(sender, instance, created, **kwargs):
+#     if created:
+#         author = instance.post.author
+#         post = instance.post
+#         text = instance.text
+#         subject = 'new comment'
+#         message = f'hello /{author.username}/, here is a comment:: /{text}/ for your post:: /{post}/'
+#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [author.email])
+#
 
 
 @receiver(post_save, sender=Comment)
