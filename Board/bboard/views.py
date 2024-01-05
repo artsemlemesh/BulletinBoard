@@ -20,7 +20,7 @@ class PostDetail(DetailView):
     context_object_name = 'post'
 
 
-sdfasd
+
 class PostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
