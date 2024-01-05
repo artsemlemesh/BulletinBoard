@@ -8,7 +8,7 @@ class PostFilter(FilterSet):
         label='filter',
         queryset=Comment.objects.all()
     )
-#sdfsd
+
     class Meta:
         model = Comment
         fields = ('post',)
