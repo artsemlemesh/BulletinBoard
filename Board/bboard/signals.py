@@ -18,15 +18,15 @@ def notify_about_comment(sender, instance, created, **kwargs):
 
 
 
-@receiver(post_save, sender=Comment)
-def notify_on_comment_acceptance(sender, instance, created, **kwargs):
-    old_status = Comment.objects.get(pk=instance.pk).status
-    if not old_status and instance.status == False:
-        return
-    sender = settings.DEFAULT_FROM_EMAIL
-    recipient = instance.author.email
-
-    send_notification(sender, [recipient], instance)
+# @receiver(post_save, sender=Comment)
+# def notify_on_comment_acceptance(sender, instance, created, **kwargs):
+#     old_status = Comment.objects.get(pk=instance.pk).status
+#     if not old_status and instance.status == False:
+#         return
+#     sender = settings.DEFAULT_FROM_EMAIL
+#     recipient = instance.author.email
+#
+#     send_notification(sender, [recipient], instance)
 
 def send_notification(sender, recipient, comment):
     email_subject = 'Comment accepted'
