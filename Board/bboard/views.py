@@ -108,21 +108,21 @@ def subscribe(request, pk):
     return render(request, 'subscribe.html', {'category': category, 'message': message})
 
 
-class CategoryListView(PostList):
-    model = Post
-    template_name = 'category_list.html'
-    context_object_name = 'category_list'
-
-    def get_queryset(self, *args, **kwargs):
-        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
-        queryset = Post.objects.filter(category=self.category)
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
-        context['category'] = self.category
-        return context
-
-
+# class CategoryListView(PostList):
+#     model = Post
+#     template_name = 'category_list.html'
+#     context_object_name = 'category_list'
+#
+#     def get_queryset(self, *args, **kwargs):
+#         self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+#         queryset = Post.objects.filter(category=self.category)
+#         return queryset
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+#         context['category'] = self.category
+#         return context
+#
+#
 
