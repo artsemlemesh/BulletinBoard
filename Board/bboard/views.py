@@ -85,27 +85,27 @@ def send_confirmation_email(user, confirmation_code):
 
 
 
-# def confirmation(request, confirmation_code):
-#     try:
-#         disposable_code = DisposableCode.objects.get(code=confirmation_code)
-#         disposable_code.user.is_active = True
-#         disposable_code.user.save()
-#         disposable_code.delete()
-#
-#         return render(request, 'registration/confirmation_success.html')
-#     except DisposableCode.DoesNotExist:
-#         return render(request, 'registration/confirmation_error.html')
-#
-#
-#
-#
-# @login_required
-# def subscribe(request, pk):
-#     user = request.user
-#     category = Category.objects.get(id=pk)
-#     category.subscribers.add(user)
-#     message = 'you have successfully subscribed to category'
-#     return render(request, 'subscribe.html', {'category': category, 'message': message})
+def confirmation(request, confirmation_code):
+    try:
+        disposable_code = DisposableCode.objects.get(code=confirmation_code)
+        disposable_code.user.is_active = True
+        disposable_code.user.save()
+        disposable_code.delete()
+
+        return render(request, 'registration/confirmation_success.html')
+    except DisposableCode.DoesNotExist:
+        return render(request, 'registration/confirmation_error.html')
+
+
+
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
+    message = 'you have successfully subscribed to category'
+    return render(request, 'subscribe.html', {'category': category, 'message': message})
 
 
 class CategoryListView(PostList):
